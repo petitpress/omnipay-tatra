@@ -103,3 +103,20 @@ ListOfExpiredPerIdResponse
 | 57 | Transaction not allowed for cardholder | Decline |
 | 61 | Exceeds withdrawal amount limit | Decline
 
+##### Added SoapFault error code as transaction status code
+
+| Error code | Description | Result |
+|---|---|---|
+| 50000 | Všeobecná chyba počas spracovania transakcie | Decline  |
+| 50001 | Došlo k timeoutu počas spracovania | In progress |
+| 50051 | Neexistujúce CID | Decline |
+| 50052 | Nekorektné Merchant ID | Decline |
+| 50053 | Záporná hodnota amount | Decline |
+| 50054 | Duplicitné transaction ID | Decline |
+| 50055 | Nekorektný VS/SS – presahuje 10 digits | Decline |
+| 50056 | Nekorektná E2E – viac ako 35 znakov | Decline |
+| 50057 | Chyba parentTransactionId | Decline
+| 50058 | Nekorektný VS/SS obsahuje AN znaky | Decline
+| 50059 | Presiahnutá suma pôvodnej autorizácie | Decline
+| 50060 | Neexistujúca parent transakcia (s daným VS/E2E, typom, stavom, menou, nie staršia ako 365 dní) | Decline
+
