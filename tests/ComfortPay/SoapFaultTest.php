@@ -12,11 +12,11 @@ use SoapFault;
 class SoapFaultTest extends TestCase
 {
     /**
-     * @dataProvider SoapFaultDetailDataProvider
+     * @dataProvider soapFaultDetailDataProvider
      */
-    public function testSoapFault($data, $expected)
+    public function testSoapFault($data, $expected): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+        if (version_compare(PHP_VERSION, '8.0.0', '<=')) {
             $this->markTestSkipped('Skipped for php 8.0');
         }
 
@@ -53,7 +53,7 @@ class SoapFaultTest extends TestCase
     /**
      * @return array[]
      */
-    public function SoapFaultDetailDataProvider()
+    public function soapFaultDetailDataProvider(): array
     {
         /*
         <types:ExceptionType>
