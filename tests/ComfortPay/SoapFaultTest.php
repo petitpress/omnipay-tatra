@@ -16,6 +16,10 @@ class SoapFaultTest extends TestCase
      */
     public function testSoapFault($data, $expected)
     {
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestSkipped('Skipped for php 8.0');
+        }
+
         $soapClientMock = $this->getMockFromWsdl(__DIR__ . '/../../src/ComfortPay/Teleplatba_1_0.wsdl');
         $soapClientMock->method('doCardTransaction')
             ->willThrowException(new SoapFault("SOAP-ENV:Receiver", '', null, $data));
