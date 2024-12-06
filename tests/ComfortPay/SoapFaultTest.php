@@ -22,13 +22,23 @@ class SoapFaultTest extends TestCase
 
         $chargeRequest = $this->getMockBuilder(ChargeRequest::class)
         ->disableOriginalConstructor()
-        ->setMethods(['getSoapClient', 'getTestMode'])
+        ->onlyMethods(['getSoapClient', 'getTestMode'])
         ->getMock();
 
         $chargeRequest->method('getSoapClient')->willReturn($soapClientMock);
         $chargeRequest->method('getTestMode')->willReturn(false);
 
-        $result = $chargeRequest->sendData(['transactionId' => '123456789']);
+        $result = $chargeRequest->sendData([
+            'transactionId' => '123456789',
+            'referedCardId' => 'refered-card-123',
+            'merchantId' => 'merchant-123',
+            'terminalId' => 'terminal-123',
+            'amount' => 1,
+            'parentTransactionId' => 1,
+            'cc' => '4405 77XX XXXX XXXX',
+            'e2eReference' => '',
+            'transactionType' => 'PURCHASE',
+        ]);
 
         $this->assertInstanceOf(CardTransactionResponse::class, $result);
         $this->assertSame('123456789', $result->getTransactionId());
