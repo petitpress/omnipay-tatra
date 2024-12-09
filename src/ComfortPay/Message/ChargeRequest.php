@@ -3,6 +3,8 @@
 namespace Omnipay\ComfortPay\Message;
 
 use Omnipay\ComfortPay\Gateway;
+use SoapFault;
+use stdClass;
 
 class ChargeRequest extends AbstractSoapRequest
 {
@@ -163,7 +165,7 @@ class ChargeRequest extends AbstractSoapRequest
             );
         }
 
-        $req = new \stdClass();
+        $req = new stdClass();
         $req->transactionId = $data['transactionId'];
         $req->referedCardId = $data['referedCardId'];
         $req->merchantId = $data['merchantId'];
@@ -172,10 +174,10 @@ class ChargeRequest extends AbstractSoapRequest
         $req->parentTransactionId = $data['parentTransactionId'];
         $req->cc = $data['cc'];
 
-        $transactionIdentificator = new \stdClass();
+        $transactionIdentificator = new stdClass();
 
         if (!empty($data['vs']) && !empty($data['ss'])) {
-            $symbols = new \stdClass();
+            $symbols = new stdClass();
             $symbols->variableSymbol = $data['vs'];
             $symbols->specificSymbol = $data['ss'];
             $transactionIdentificator->symbols = $symbols;
@@ -186,7 +188,7 @@ class ChargeRequest extends AbstractSoapRequest
         $req->transactionIdentificator = $transactionIdentificator;
 
         if (!empty($data['submerchantId']) && !empty($data['location']) && !empty($data['city']) && !empty($data['alpha2CountryCode'])) {
-            $ipspData = new \stdClass();
+            $ipspData = new stdClass();
             $ipspData->submerchantId = $data['submerchantId'];
             $ipspData->location = $data['location'];
             $ipspData->city = $data['city'];
@@ -194,14 +196,14 @@ class ChargeRequest extends AbstractSoapRequest
             $req->ipspData = $ipspData;
         }
 
-        $request = new \stdClass();
+        $request = new stdClass();
         $request->req = $req;
         $request->transactionType = $data['transactionType'];
 
         $client = $this->getSoapClient();
         try {
             $response = $client->doCardTransaction($request);
-        } catch (\SoapFault $sf) {
+        } catch (SoapFault $sf) {
             // special case for TB :-(
             // they started to return an error when they are not able to charge this card. We don't want to treat it as SoapFault Exception because it is a "regular" answer. SoapFault is for error on network, outage, etc...
             // here is an error example:
@@ -213,6 +215,7 @@ class ChargeRequest extends AbstractSoapRequest
                     'transactionApproval' => false,
                 ]);
             }
+
             throw $sf;
         }
 
